@@ -1,31 +1,76 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ChevronRight, MapPin } from 'lucide-react';
+import { useToast } from "@/components/ui/use-toast";
+import axios from 'axios';
 
 const Footer = () => {
+  const [email, setEmail] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      const response = await axios.post('https://respizenmedical.com/fiori/subscribe_email.php', {
+        email
+      });
+
+      if (response.data.status === 'success') {
+        toast({
+          title: "Inscription réussie !",
+          description: "Merci de vous être inscrit à notre newsletter.",
+          duration: 3000,
+        });
+        setEmail('');
+      } else {
+        throw new Error(response.data.message);
+      }
+    } catch (error) {
+      console.error('Newsletter subscription error:', error);
+      toast({
+        variant: "destructive",
+        title: "Erreur",
+        description: "Une erreur s'est produite lors de l'inscription. Veuillez réessayer.",
+        duration: 3000,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <footer className="bg-[#471818] text-white py-8 lg:py-10 px-4 lg:px-16 text-[1rem] lg:text-[1.1rem] font-['WomanFontBold']">
       {/* Newsletter Section */}
       <div className="mb-7">
         <h3 className="text-[1.1rem] text-left lg:text-[1.25rem] font-['WomanFontBold'] mb-3.5">NEWSLETTER</h3>
-        <p className="mb-5.5  text-left leading-relaxed">
+        <p className="mb-5.5 text-left leading-relaxed">
           Inscrivez-vous pour recevoir par e-mail des mises à jour <br className="hidden lg:block" />
           sur les dernières collections, campagnes et vidéos de Fiori.
         </p>
         <br></br>
-        <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-0">
+        <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row items-center gap-4 sm:gap-0">
           <input
             type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             placeholder="Email"
             className="w-full sm:w-80 mr-0 sm:mr-3.5 px-3 py-3 bg-white/20 border border-red-500 rounded
                      text-white placeholder-white/70 outline-none backdrop-blur-sm
                      shadow-md transition-all duration-300
                      focus:border-[#ff5e5e] focus:shadow-[#ff5e5e]/50 focus:shadow-lg
                      font-['WomanFontBold']"
+            disabled={isLoading}
           />
-          <button className="text-white text-[1.3rem]">
+          <button 
+            type="submit" 
+            className="text-white text-[1.3rem] disabled:opacity-50 transition-opacity"
+            disabled={isLoading}
+          >
             <ChevronRight className="w-7 h-7" />
           </button>
-        </div>
+        </form>
       </div>
 
       <div className="text-left lg:text-right">
