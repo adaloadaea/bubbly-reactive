@@ -18,8 +18,8 @@ const LoadingScreen = React.lazy(() => import('../components/LoadingScreen'));
 const GiftCollection = React.lazy(() => import('../components/GiftCollection'));
 const WhatsAppPopup = React.lazy(() => import('../components/WhatsAppPopup'));
 const SalesPopup = React.lazy(() => import('../components/SalesPopup'));
+const NewsletterPopup = React.lazy(() => import('../components/NewsletterPopup'));
 
-// Loading fallback component
 const LoadingFallback = () => (
   <div className="w-full h-24 animate-pulse">
     <Skeleton className="w-full h-full" />
@@ -115,8 +115,6 @@ const Index = () => {
                 </Suspense>
               </motion.div>
 
-              
-
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: isInView ? 1 : 0 }}
@@ -139,6 +137,8 @@ const Index = () => {
 
               <Suspense fallback={null}>
                 <WhatsAppPopup />
+                <SalesPopup />
+                <NewsletterPopup />
               </Suspense>
             </Suspense>
           </motion.div>
