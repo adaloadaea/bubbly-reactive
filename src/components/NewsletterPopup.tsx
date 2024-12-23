@@ -12,7 +12,6 @@ const NewsletterPopup = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    // Check if user has already seen the popup
     const hasSeenPopup = localStorage.getItem('hasSeenNewsletterPopup');
     
     if (!hasSeenPopup) {
@@ -42,6 +41,7 @@ const NewsletterPopup = () => {
         toast({
           title: "Inscription réussie !",
           description: "Merci de vous être inscrit à notre newsletter.",
+          duration: 3000, // Set to 3 seconds
         });
         handleClose();
       } else {
@@ -53,6 +53,7 @@ const NewsletterPopup = () => {
         variant: "destructive",
         title: "Erreur",
         description: "Une erreur s'est produite lors de l'inscription. Veuillez réessayer.",
+        duration: 3000,
       });
     } finally {
       setIsLoading(false);
@@ -66,7 +67,7 @@ const NewsletterPopup = () => {
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.9 }}
-          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 md:p-8"
         >
           <div 
             className="absolute inset-0 bg-black/40"
@@ -74,36 +75,36 @@ const NewsletterPopup = () => {
           />
           
           <motion.div 
-            className="relative w-full max-w-md glass-effect rounded-xl p-8 text-white"
+            className="relative w-full max-w-[90%] sm:max-w-md glass-effect rounded-xl p-4 sm:p-6 md:p-8 text-white"
             initial={{ y: 20 }}
             animate={{ y: 0 }}
           >
             <button
               onClick={handleClose}
-              className="absolute right-4 top-4 text-white/60 hover:text-white transition-colors"
+              className="absolute right-2 sm:right-4 top-2 sm:top-4 text-white/60 hover:text-white transition-colors"
               aria-label="Fermer"
             >
-              <X className="h-6 w-6" />
+              <X className="h-5 w-5 sm:h-6 sm:w-6" />
             </button>
 
-            <h2 className="text-2xl font-bold mb-2">
+            <h2 className="text-xl sm:text-2xl font-bold mb-2">
               Offres Exclusives & Nouveautés
             </h2>
             
-            <p className="text-white/80 mb-6">
+            <p className="text-white/80 mb-4 sm:mb-6 text-sm sm:text-base">
               Inscrivez-vous à notre newsletter et bénéficiez de -10% sur votre première commande !
             </p>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Votre adresse email"
                 required
-                className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg bg-white/10 border border-white/20 
                           placeholder-white/60 text-white outline-none focus:border-white/40
-                          transition-colors"
+                          transition-colors text-sm sm:text-base"
               />
               
               <Button 
@@ -114,7 +115,7 @@ const NewsletterPopup = () => {
                 {isLoading ? "Inscription..." : "S'inscrire"}
               </Button>
 
-              <p className="text-xs text-white/60 text-center">
+              <p className="text-[10px] sm:text-xs text-white/60 text-center">
                 En vous inscrivant, vous acceptez de recevoir nos newsletters et nos offres commerciales.
               </p>
             </form>
